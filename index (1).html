@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Booking App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #ff7043;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 20px;
+    }
+    .food-item {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin: 10px;
+      width: 200px;
+      text-align: center;
+      padding: 15px;
+    }
+    .food-item img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    button {
+      background: #ff7043;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin-top: 8px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #e64a19;
+    }
+    .cart {
+      background: white;
+      margin: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .cart h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🍕 Food Booking System</h1>
+  </header>
+
+  <div class="menu" id="menu">
+    <!-- Food items will load here -->
+  </div>
+
+  <div class="cart">
+    <h2>Your Cart</h2>
+    <ul id="cart-list"></ul>
+    <p><strong>Total:</strong> $<span id="total">0</span></p>
+    <button id="book-btn">Book Order</button>
+  </div>
+
+  <script>
+    // Sample food menu
+    const menuItems = [
+      { id: 1, name: "Pizza Margherita", price: 12, img: "https://via.placeholder.com/200?text=Pizza" },
+      { id: 2, name: "Burger", price: 8, img: "https://via.placeholder.com/200?text=Burger" },
+      { id: 3, name: "Pasta Alfredo", price: 10, img: "https://via.placeholder.com/200?text=Pasta" },
+      { id: 4, name: "Chicken Biryani", price: 15, img: "https://via.placeholder.com/200?text=Biryani" },
+      { id: 5, name: "Ice Cream", price: 5, img: "https://via.placeholder.com/200?text=Ice+Cream" }
+    ];
+
+    const menuContainer = document.getElementById('menu');
+    const cartList = document.getElementById('cart-list');
+    const totalDisplay = document.getElementById('total');
+    const bookBtn = document.getElementById('book-btn');
+
+    let cart = [];
+
+    // Display menu items
+    function loadMenu() {
+      menuItems.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('food-item');
+        div.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <p>$${item.price}</p>
+          <button onclick="addToCart(${item.id})">Add to Cart</button>
+        `;
+        menuContainer.appendChild(div);
+      });
+    }
+
+    // Add item to cart
+    function addToCart(id) {
+      const item = menuItems.find(food => food.id === id);
+      cart.push(item);
+      updateCart();
+    }
+
+    // Update cart display
+    function updateCart() {
+      cartList.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - $${item.price}`;
+        cartList.appendChild(li);
+        total += item.price;
+      });
+      totalDisplay.textContent = total.toFixed(2);
+    }
+
+    // Booking button
+    bookBtn.addEventListener('click', () => {
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+      } else {
+        alert(`Thank you! Your order for ${cart.length} item(s) has been booked!`);
+        cart = [];
+        updateCart();
+      }
+    });
+
+    // Initialize menu
+    loadMenu();
+  </script>
+</body>
+</html>
